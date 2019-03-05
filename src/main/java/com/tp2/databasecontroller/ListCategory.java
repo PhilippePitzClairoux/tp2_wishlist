@@ -5,6 +5,7 @@ public class ListCategory {
 
     private String listCategoryName;
     private String listCategoryDescription;
+    private Integer listCategoryId;
 
     //Class getteurs/setteurs for database
     /**
@@ -16,15 +17,15 @@ public class ListCategory {
     }
 
     /**
-     * Load a category based on it's id
-     * @param id The id of the category
+     * Load a category based on it's listCategoryId
      */
-    public void loadCategory(int id) {
+    public void loadCategory() {
 
     }
 
     /**
      * Creates the current category in the database if it doesnt already exist
+     * This will also set the value of listCategoryId
      */
     public void createNewCategory() {
 
@@ -42,6 +43,18 @@ public class ListCategory {
     public ListCategory(String listCategoryName, String listCategoryDescription) {
         this.listCategoryName = listCategoryName;
         this.listCategoryDescription = listCategoryDescription;
+    }
+
+    public ListCategory(Integer id) {
+        this.listCategoryId = id;
+    }
+
+    public Integer getListCategoryId() {
+        return listCategoryId;
+    }
+
+    public void setListCategoryId(Integer listCategoryId) {
+        this.listCategoryId = listCategoryId;
     }
 
     public String getListCategoryName() {

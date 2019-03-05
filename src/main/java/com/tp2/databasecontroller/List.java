@@ -4,45 +4,94 @@ import java.util.ArrayList;
 
 public class List {
 
-    private String wishlistName;
-    private String wishlistDescription;
-    private ArrayList<ListEntity> items;
+    private String listName;
+    private String listDescription;
+    private ArrayList<ListEntity> listItems;
+    private Integer listId;
 
+
+    //Class getteurs/setteurs for the db
+
+    /**
+     * Remove all the entities from the list and
+     * completely removes the list from the database.
+     */
+    public void removeList() {
+
+    }
+
+    /**
+     * This method loads all the info of a list and all it's
+     * Entities.
+     */
+    public void loadList() {
+
+    }
+
+    /**
+     * Create a new list in the database
+     * This method will NOT add items in the list
+     */
+    public void createList() {
+
+    }
+
+    /**
+     * Add the new ListEntities to the database and update
+     * the various info a list holds.
+     */
+    public void updateList() {
+
+    }
+
+    //Class getteurs/setteurs
 
     public List(String wishlistName, String wishlistDescription) {
-        this.wishlistName = wishlistName;
-        this.wishlistDescription = wishlistDescription;
+        this.listName = wishlistName;
+        this.listDescription = wishlistDescription;
     }
 
-    public String getWishlistName() {
-        return wishlistName;
+    public List(Integer listId) {
+        this.listId = listId;
     }
 
-    public void setWishlistName(String wishlistName) {
-        this.wishlistName = wishlistName;
+    public Integer getListId() {
+        return listId;
     }
 
-    public String getWishlistDescription() {
-        return wishlistDescription;
+    public void setListId(Integer listId) {
+        this.listId = listId;
     }
 
-    public void setWishlistDescription(String wishlistDescription) {
-        this.wishlistDescription = wishlistDescription;
+    public String getListName() {
+        return listName;
+    }
+
+    public void setListName(String listName) {
+        this.listName = listName;
+    }
+
+    public String getListDescription() {
+        return listDescription;
+    }
+
+    public void setListDescription(String listDescription) {
+        this.listDescription = listDescription;
     }
 
     public ListEntity getItem(int index) {
-        return this.items.get(index);
+        return this.listItems.get(index);
     }
 
-    public ArrayList<ListEntity> getItems() {
-        return items;
+    public ArrayList<ListEntity> getListItems() {
+        return listItems;
     }
 
     public void setItem(ListEntity item) {
-        this.items.add(item);
+        this.listItems.add(item);
     }
 
-    public void setItems(ArrayList<ListEntity> items) {
-        this.items = items;
+    public void setListItems(ArrayList<ListEntity> listItems) {
+        this.listItems = listItems;
     }
 }
