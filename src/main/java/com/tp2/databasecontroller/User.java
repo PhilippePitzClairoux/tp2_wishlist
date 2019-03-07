@@ -25,14 +25,13 @@ public class User {
 
         Connection conn = ConnectionManager.getConnection();
         PreparedStatement stat = conn.prepareStatement(
-                "DELETE FROM user WHERE user.username = ? AND user.id_user = ? AND user.password = ?");
+                "DELETE FROM users WHERE users.username = ? AND users.id_user = ? AND users.password = ?");
 
         stat.setString(1, this.getUserName());
         stat.setInt(2, this.getUserId());
         stat.setString(3, this.getUserPassword());
 
-
-        if (!stat.execute())
+        if (stat.executeUpdate() != 1)
             throw new CannotDeleteUser();
 
         conn.close();
@@ -46,12 +45,12 @@ public class User {
 
         Connection conn = ConnectionManager.getConnection();
         PreparedStatement stat = conn.prepareStatement(
-                "INSERT INTO user(user.username, user.password) VALUES (?, ?)");
+                "INSERT INTO users(users.username, users.password) VALUES (?, ?)");
 
         stat.setString(1, this.getUserName());
         stat.setString(2, this.getUserPassword());
 
-        if (!stat.execute())
+        if (stat.executeUpdate() != 1)
             throw new CannotCreateUser();
 
         stat.close();
@@ -65,13 +64,13 @@ public class User {
     public void updateUser() throws SQLException, CouldNotUpdate {
         Connection conn = ConnectionManager.getConnection();
         PreparedStatement stat = conn.prepareStatement(
-                "UPDATE user SET user.username = ?, user.password = ? WHERE user.id_user = ?");
+                "UPDATE users SET users.username = ?, users.password = ? WHERE users.id_user = ?");
 
         stat.setString(1, this.getUserName());
         stat.setString(2, this.getUserPassword());
         stat.setInt(3, this.getUserId());
 
-        if (stat.executeUpdate() == 0)
+        if (stat.executeUpdate() != 1)
             throw new CouldNotUpdate();
 
         stat.close();
@@ -84,19 +83,20 @@ public class User {
      */
     public boolean testPassword() throws SQLException {
 
+        this.getDatabaseUserId();
         Connection conn = ConnectionManager.getConnection();
         PreparedStatement stat = conn.prepareStatement(
-                "SELECT user.password FROM user WHERE username = ?");
+                "SELECT users.password FROM users WHERE users.username = ? AND users.id_user = ?");
 
         stat.setString(1, this.getUserName());
+        stat.setInt(2, this.getUserId());
+
         stat.execute();
 
         ResultSet response = stat.getResultSet();
 
         if (!response.next())
             return false;
-
-        this.userId = response.getInt("id_user");
 
         if (!response.getString("password").equals(this.getUserPassword()))
             throw new InvalidPassword();
@@ -119,15 +119,32 @@ public class User {
 
         Connection conn = ConnectionManager.getConnection();
         PreparedStatement stat = conn.prepareStatement(
-                "UPDATE user SET user.password = ? WHERE user.username = ?");
+                "UPDATE users SET users.password = ? WHERE users.username = ? AND users.id_user = ?");
 
         stat.setString(1, this.getUserPassword());
         stat.setString(2, this.getUserName());
+        stat.setInt(3, this.getUserId());
 
         if (stat.executeUpdate() != 1)
             throw new RuntimeException("Cannot Modify password");
 
         stat.close();
+        conn.close();
+    }
+
+    public void getDatabaseUserId() throws SQLException {
+
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "SELECT users.id_user FROM users WHERE users.username = ?");
+
+        stat.setString(1, this.getUserName());
+        ResultSet res = stat.executeQuery();
+
+        res.next();
+        this.userId = res.getInt("id_user");
+
+        res.close();
         conn.close();
     }
 
