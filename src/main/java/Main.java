@@ -13,6 +13,8 @@ public class Main {
         JPanel pane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
+        pane.setSize(300, 300);
+
         c.fill = GridBagConstraints.HORIZONTAL;
 
         final JLabel ltitle = new JLabel("Login Info");
@@ -50,10 +52,12 @@ public class Main {
 
 
         pane.setBackground(Color.GRAY);
+        frame.setBackground(Color.WHITE);
 
         frame.setContentPane(pane);
         frame.setSize(1000, 900);
         frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public static void addComponenet(int gridx, int gridy, int padding, GridBagConstraints c) {
