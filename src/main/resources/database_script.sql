@@ -4,7 +4,7 @@ CREATE DATABASE wishlistdb;
 
 USE wishlistdb; 
 
-CREATE TABLE IF NOT EXISTS user 
+CREATE TABLE IF NOT EXISTS users
   ( 
      id_user  INT UNSIGNED NOT NULL auto_increment, 
      username CHAR(64) NOT NULL, 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS wishlist
      description CHAR(254), 
      id_user     INT UNSIGNED NOT NULL, 
      CONSTRAINT pk_wishlist PRIMARY KEY (id_wishlist), 
-     FOREIGN KEY (id_user) REFERENCES user(id_user) 
+     FOREIGN KEY (id_user) REFERENCES users(id_user)
   ); 
 
 CREATE TABLE IF NOT EXISTS item 
@@ -97,8 +97,8 @@ INSERT INTO wishlist_category(name) VALUES("Holiday");
 INSERT INTO wishlist_category(name) VALUES("2019");
 INSERT INTO wishlist_category(name) VALUES("Groceries");
   
-INSERT INTO user(username, password) VALUES("Pitz", "pass123");
-INSERT INTO user(username, password) VALUES("Thia", "pass123");
+INSERT INTO users(username, password) VALUES("Pitz", "pass123");
+INSERT INTO users(username, password) VALUES("Thia", "pass123");
 
 INSERT INTO item(name, price, link, description, id_currency, id_item_category) VALUES("Plaid Blanket Scarf", 15.99, "http://abc.com", "Perfectly plaid blanket scarf by UO. Fuzzy and soft knit construction cut long + wide with two tassel ends that wrap around the neck like a blanket. Finished with raw edges for added texture.",1, 1);
 INSERT INTO item(name, price, link, id_currency, id_item_category) VALUES("Household Slippers", 17.99, "http://abc.com", 1, 1);
