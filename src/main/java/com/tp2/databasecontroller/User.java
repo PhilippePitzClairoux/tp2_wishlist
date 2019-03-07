@@ -1,5 +1,8 @@
 package com.tp2.databasecontroller;
 
+import com.tp2.exceptions.InvalidPassword;
+
+import java.sql.*;
 import java.util.ArrayList;
 
 public class User {
@@ -15,7 +18,7 @@ public class User {
     /**
      * Remove the current user from the database
      */
-    public void removeUser() {
+    public void removeUser() throws SQLException {
 
     }
 
@@ -38,18 +41,48 @@ public class User {
      * Check if the user inputed userPassword matches with the one in the db
      * @return If it returns true, the userPassword is valid for the userName.
      */
-    public boolean testPassword() {
+    public boolean testPassword() throws SQLException {
 
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "SELECT user.password FROM user WHERE username = ?");
+
+        stat.setString(1, this.getUserName());
+        stat.execute();
+
+        ResultSet response = stat.getResultSet();
+
+        if (!response.next())
+            return false;
+
+        if (!response.getString("password").equals(this.getUserPassword()))
+            throw new InvalidPassword();
+
+        this.validPassword = true;
         return true;
     }
 
     /**
      * This function updates the userPassword in the database. Performs a testPassword before updating it.
      */
-    public void updatePassword() {
+    public void updatePassword() throws SQLException {
 
-        if (!this.testPassword())
-            return;
+        if (!this.validPassword)
+            throw new InvalidPassword();
+
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "UPDATE user SET user.password = ? WHERE user.username = ?");
+
+        stat.setString(1, this.getUserPassword());
+        stat.setString(2, this.getUserName());
+
+        int l = stat.executeUpdate();
+
+        if (l != 1)
+            throw new RuntimeException("Cannot Modify password");
+
+        System.out.println("Password has been modified!");
     }
 
     //Class getteurs/setteurs
