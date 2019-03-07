@@ -1,5 +1,8 @@
 package com.tp2.databasecontroller;
 
+import com.tp2.exceptions.CannotCreateUser;
+import com.tp2.exceptions.CannotDeleteUser;
+import com.tp2.exceptions.CouldNotUpdate;
 import com.tp2.exceptions.InvalidPassword;
 
 import java.sql.*;
@@ -20,21 +23,59 @@ public class User {
      */
     public void removeUser() throws SQLException {
 
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "DELETE FROM user WHERE user.username = ? AND user.id_user = ? AND user.password = ?");
+
+        stat.setString(1, this.getUserName());
+        stat.setInt(2, this.getUserId());
+        stat.setString(3, this.getUserPassword());
+
+
+        if (!stat.execute())
+            throw new CannotDeleteUser();
+
+        conn.close();
+        stat.close();
     }
 
     /**
      * Create a new user inside the database
      */
-    public void createUser() {
+    public void createUser() throws SQLException {
 
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "INSERT INTO user(user.username, user.password) VALUES (?, ?)");
+
+        stat.setString(1, this.getUserName());
+        stat.setString(2, this.getUserPassword());
+
+        if (!stat.execute())
+            throw new CannotCreateUser();
+
+        stat.close();
+        conn.close();
     }
 
     /**
      * Update the current info of the user inside the
      * database.
      */
-    public void updateUser() {
+    public void updateUser() throws SQLException, CouldNotUpdate {
+        Connection conn = ConnectionManager.getConnection();
+        PreparedStatement stat = conn.prepareStatement(
+                "UPDATE user SET user.username = ?, user.password = ? WHERE user.id_user = ?");
 
+        stat.setString(1, this.getUserName());
+        stat.setString(2, this.getUserPassword());
+        stat.setInt(3, this.getUserId());
+
+        if (stat.executeUpdate() == 0)
+            throw new CouldNotUpdate();
+
+        stat.close();
+        conn.close();
     }
 
     /**
@@ -55,8 +96,14 @@ public class User {
         if (!response.next())
             return false;
 
+        this.userId = response.getInt("id_user");
+
         if (!response.getString("password").equals(this.getUserPassword()))
             throw new InvalidPassword();
+
+        response.close();
+        stat.close();
+        conn.close();
 
         this.validPassword = true;
         return true;
@@ -80,7 +127,8 @@ public class User {
         if (stat.executeUpdate() != 1)
             throw new RuntimeException("Cannot Modify password");
 
-        System.out.println("Password has been modified!");
+        stat.close();
+        conn.close();
     }
 
     //Class getteurs/setteurs
