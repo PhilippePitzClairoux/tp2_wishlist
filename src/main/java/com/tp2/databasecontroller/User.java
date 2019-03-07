@@ -77,9 +77,7 @@ public class User {
         stat.setString(1, this.getUserPassword());
         stat.setString(2, this.getUserName());
 
-        int l = stat.executeUpdate();
-
-        if (l != 1)
+        if (stat.executeUpdate() != 1)
             throw new RuntimeException("Cannot Modify password");
 
         System.out.println("Password has been modified!");
