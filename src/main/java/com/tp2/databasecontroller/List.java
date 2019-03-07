@@ -37,7 +37,7 @@ public class List {
     }
 
     /**
-     * Add the new ListEntities to the database and update
+     * Add/delete ListEntities to the database and update
      * the various info a list holds.
      */
     public void updateList() {
@@ -87,7 +87,7 @@ public class List {
         return listItems;
     }
 
-    public void setItem(ListEntity item) {
+    public void addItem(ListEntity item) {
         this.listItems.add(item);
     }
 

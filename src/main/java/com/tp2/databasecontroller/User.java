@@ -1,10 +1,13 @@
 package com.tp2.databasecontroller;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String userName;
     private String userPassword;
     private Integer userId;
+    private ArrayList<List> userLists;
     private boolean validPassword = false;
 
     //Class getters/setteurs for db
@@ -55,6 +58,10 @@ public class User {
         this.userName = username;
         this.userPassword = password;
     }
+
+    public ArrayList<List> getUserLists() { return userLists; }
+
+    public void addUserList(List l) { this.userLists.add(l); }
 
     public User(Integer userId) {
         this.userId = userId;
